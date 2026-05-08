@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Face Melter – AWS Rekognition Tester</title>
+  <meta name="description" content="A lightweight tool to test the Amazon Rekognition CompareFaces API with drag-and-drop image uploads." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+  <!-- Animated background blobs -->
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+
+  <main id="app">
+    <header class="hero">
+      <h1>Face<span class="accent">Melter</span></h1>
+      <p class="subtitle">Powered by Amazon Rekognition</p>
+    </header>
+
+    <section class="upload-area" id="uploadArea">
+      <div class="drop-zone" id="dropSource" data-role="source">
+        <input type="file" id="inputSource" accept="image/*" hidden />
+        <div class="drop-zone__preview" id="previewSource"></div>
+        <div class="drop-zone__prompt">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          <span class="label">Source Image</span>
+          <span class="hint">Drag &amp; drop or click</span>
+        </div>
+      </div>
+
+      <div class="vs-badge">VS</div>
+
+      <div class="drop-zone" id="dropTarget" data-role="target">
+        <input type="file" id="inputTarget" accept="image/*" hidden />
+        <div class="drop-zone__preview" id="previewTarget"></div>
+        <div class="drop-zone__prompt">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          <span class="label">Target Image</span>
+          <span class="hint">Drag &amp; drop or click</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Threshold slider -->
+    <section class="controls">
+      <label class="slider-label" for="threshold">
+        Similarity Threshold: <strong id="thresholdValue">80</strong>%
+      </label>
+      <input type="range" id="threshold" min="0" max="100" value="80" />
+    </section>
+
+    <button class="btn-compare" id="btnCompare" disabled>
+      <span class="btn-compare__text">Compare Faces</span>
+      <span class="btn-compare__loader"></span>
+    </button>
+
+    <!-- Results panel -->
+    <section class="results hidden" id="results">
+      <div class="results__header">
+        <h2>Results</h2>
+        <button class="btn-clear" id="btnClear" title="Clear results">✕</button>
+      </div>
+
+      <!-- Big similarity gauge -->
+      <div class="gauge-wrapper" id="gaugeWrapper">
+        <svg class="gauge" viewBox="0 0 200 200">
+          <circle class="gauge__bg" cx="100" cy="100" r="85" />
+          <circle class="gauge__fill" id="gaugeFill" cx="100" cy="100" r="85" />
+        </svg>
+        <div class="gauge__label">
+          <span class="gauge__pct" id="gaugePct">—</span>
+          <span class="gauge__sub">Similarity</span>
+        </div>
+      </div>
+
+      <!-- Match cards -->
+      <div class="match-cards" id="matchCards"></div>
+
+      <!-- Raw JSON toggle -->
+      <details class="raw-json">
+        <summary>Raw API Response</summary>
+        <pre id="rawJson"></pre>
+      </details>
+    </section>
+
+    <!-- Error toast -->
+    <div class="toast hidden" id="toast"></div>
+  </main>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
